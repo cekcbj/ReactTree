@@ -14,11 +14,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
-import WorkIcon from '@material-ui/icons/Work';
-import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import Button from '@material-ui/core/Button';
 import { createMuiTheme, withTheme } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
@@ -72,6 +72,11 @@ function getModalStyle() {
   };
 }
 
+
+function node(name, children, isOpen, nodeType) {
+  console.log(name);
+}
+
 class MenuAppBar extends React.Component {
   constructor(props) {
     super(props)
@@ -85,7 +90,33 @@ class MenuAppBar extends React.Component {
     anchorEl: null,
     isModalOpen: false,
     cb: () => '',
-    tree: {},
+    tree: {
+      root: node (
+        "sandbox",
+        [
+          node( "react.js", [], false, '__FILE'),
+          node(
+            "Examples",
+            [
+              node( "index.js", [], false, '__FILE'),
+              node( "main.js", [], false, '__FILE'),
+              node(
+                "channels",
+                [
+                  node( "main.js", [], false, '__FILE')
+                ],
+                false,
+                '__DIRECTORY'
+              ),
+            ],
+            true,
+            '__DIRECTORY'
+          ),
+        ],
+        false,
+        '__DIRECTORY'
+      )
+    },
   };
 
 
@@ -146,24 +177,13 @@ class MenuAppBar extends React.Component {
             </Typography>
           </div>
         </Modal>
+        {for children of tree.root }
         <List component="nav">
           <ListItem button>
             <Avatar>
               <ImageIcon />
             </Avatar>
             <ListItemText primary="Photos" secondary="Jan 9, 2014" />
-          </ListItem>
-          <ListItem>
-            <Avatar>
-              <WorkIcon />
-            </Avatar>
-            <ListItemText primary="Work" secondary="Jan 7, 2014" />
-          </ListItem>
-          <ListItem>
-            <Avatar>
-              <BeachAccessIcon />
-            </Avatar>
-            <ListItemText primary="Vacation" secondary="July 20, 2014" />
           </ListItem>
         </List>
       </div>
