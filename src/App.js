@@ -1,21 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as _ from 'ramda';
-
-
-function node(name, children, isOpen, nodeType) {
-  if (nodeType === "__FILE") {
-    return { name, nodeChildren: children, isOpen, nodeType }
-  }
-
-  let nodeChildren = [];
-  if (children && children.length > 0) {
-    nodeChildren = children.reduce((acc, c) => {
-      return acc.concat(node(c.name, c.nodeChildren, c.isOpen, c.nodeType))
-    },[])
-  }
-  return { name, nodeChildren, isOpen, nodeType }
-}
+import treeObj from './tree';
 
 class MenuAppBar extends React.Component {
   constructor(props) {
@@ -28,59 +13,14 @@ class MenuAppBar extends React.Component {
   state = {
     isModalOpen: false,
     cb: () => '',
-    tree: {
-      root: node (
-         "sandbox",
-         [
-          node( "react.js", [], false, '__FILE'),
-          node(
-            "Examples",
-            [
-              node( "index.js", [], false, '__FILE'),
-              node( "main.js", [], false, '__FILE'),
-              node(
-                "Channels",
-                [
-                  node( "work.js", [], false, '__FILE'),
-                  node(
-                    "Fun",
-                    [
-                      node( "what.js", [], false, '__FILE'),
-                      node( "testing.js", [], false, '__FILE'),
-                      node(
-                        "Random",
-                        [
-                          node( "fizz.js", [], false, '__FILE')
-                        ],
-                        false,
-                        '__DIRECTORY'
-                      ),
-                    ],
-                    true,
-                    '__DIRECTORY'
-                  )
-                ],
-                false,
-                '__DIRECTORY'
-              ),
-            ],
-            true,
-            '__DIRECTORY'
-          ),
-        ],
-        false,
-        '__DIRECTORY'
-      )
-    },
-  };
-
+    tree: treeObj,
+  }
 
   handleClose() {
     this.setState({
       isModalOpen: false,
     })
   }
-
 
   handleClick() {
     this.setState({
@@ -143,9 +83,5 @@ class MenuAppBar extends React.Component {
     );
   }
 }
-
-MenuAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default MenuAppBar
