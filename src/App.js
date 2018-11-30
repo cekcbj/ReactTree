@@ -17,16 +17,6 @@ function node(name, children, isOpen, nodeType) {
   return { name, nodeChildren, isOpen, nodeType }
 }
 
-/*
- *
- * Next steps
- * » 1. Swap out material ui for bootstrap
- * » 2. Traverse tree to render files and directory
- * 3. Add open functionality to folders
- * 4. Add close functionality
- *
-*/
-
 class MenuAppBar extends React.Component {
   constructor(props) {
     super(props)
@@ -93,15 +83,12 @@ class MenuAppBar extends React.Component {
 
 
   handleClick() {
-    console.log("clicked em");
-    console.log(_.isEmpty(this.state.tree))
     this.setState({
       isModalOpen: true
     })
   }
 
   updateNode(node) {
-    console.log(node);
     let newNode = this.modifyNode(this.state.tree.root, node )
     this.setState({ tree: { root : newNode }})
   }
@@ -130,7 +117,6 @@ class MenuAppBar extends React.Component {
   }
 
   renderTree(root) {
-    console.log(root);
     return (
       <ul>
         {this.renderNode(root)}
@@ -140,7 +126,6 @@ class MenuAppBar extends React.Component {
 
   render() {
     const shouldCreateProject = _.isEmpty(this.state.tree)
-    console.log(this.state)
     let addItemType = shouldCreateProject? 'Project': 'Directory'
 
     return (
