@@ -5,27 +5,11 @@ import treeObj from './tree';
 class MenuAppBar extends React.Component {
   constructor(props) {
     super(props)
-
-    this.handleClick  = this.handleClick.bind(this);
-    this.handleClose  = this.handleClose.bind(this);
   }
 
   state = {
-    isModalOpen: false,
     cb: () => '',
     tree: treeObj,
-  }
-
-  handleClose() {
-    this.setState({
-      isModalOpen: false,
-    })
-  }
-
-  handleClick() {
-    this.setState({
-      isModalOpen: true
-    })
   }
 
   updateNode(node) {
@@ -41,28 +25,20 @@ class MenuAppBar extends React.Component {
   }
 
   renderNode(node) {
-    if(node.nodeType === "__DIRECTORY" && node.nodeChildren.length > 0){
+    if(node.nodeType === "__DIRECTORY" && node.nodeChildren.length > 0) {
       return (
         <div>
-          <li className="font-weight-bold" onClick={() => this.updateNode(node)}>{node.name}</li>
-          { node.isOpen && node.nodeChildren.map(c => this.renderTree(c))}
+          <li className="font-weight-bold" onClick={() => this.updateNode(node)}>
+            {node.name}
+          </li>
+          { node.isOpen && <ul>{node.nodeChildren.map(c => this.renderNode(c))}</ul>}
         </div>
       )
     }
-    return (
-      <li>
-        {node.name}
-      </li>
-    )
-  }
+    return <li className="file"> {node.name} </li>
+  };
 
-  renderTree(root) {
-    return (
-      <ul>
-        {this.renderNode(root)}
-      </ul>
-    )
-  }
+  renderTree(root) { return <div className="directory-root"> {this.renderNode(root)} </div> }
 
   render() {
     const shouldCreateProject = _.isEmpty(this.state.tree)
@@ -73,12 +49,14 @@ class MenuAppBar extends React.Component {
         <h1>
           React Tree
         </h1>
-        <button type="button" className="btn btn-primary add-button">{addItemType}</button>
-        <ul>
-        {
-          this.renderTree(this.state.tree.root)
-        }
-        </ul>
+        <div className="directory-wrapper">
+          <button type="button" className="btn btn-primary add-button">{addItemType}</button>
+          <div className="directory">
+            {
+              this.renderTree(this.state.tree.root)
+            }
+          </div>
+        </div>
       </div>
     );
   }

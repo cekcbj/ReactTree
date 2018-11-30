@@ -8,6 +8,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.list-group.list-group-root .list-group-item {
+  border-radius: 0;
+  border-width: 1px 0 0 0;
+}
+
+ul, li {
+  list-style: none;
+}
+
+
+.directory-wrapper {
+  width: 300px;
+  height: 600px;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
