@@ -117,7 +117,7 @@ class MenuAppBar extends React.Component {
     if(node.nodeType === "__DIRECTORY" && node.nodeChildren.length > 0){
       return (
         <div>
-          <li className="bold" onClick={() => this.updateNode(node)}>{node.name}</li>
+          <li className="font-weight-bold" onClick={() => this.updateNode(node)}>{node.name}</li>
           { node.isOpen && node.nodeChildren.map(c => this.renderTree(c))}
         </div>
       )
