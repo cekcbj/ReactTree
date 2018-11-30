@@ -4,7 +4,6 @@ import * as _ from 'ramda';
 
 
 function node(name, children, isOpen, nodeType) {
-  console.log('the name is', name);
   if (nodeType === "__FILE") {
     return { name, nodeChildren: children, isOpen, nodeType }
   }
@@ -21,8 +20,8 @@ function node(name, children, isOpen, nodeType) {
 /*
  *
  * Next steps
- * 1. Swap out material ui for bootstrap
- * 2. Traverse tree to render files and directory
+ * » 1. Swap out material ui for bootstrap
+ * » 2. Traverse tree to render files and directory
  * 3. Add open functionality to folders
  * 4. Add close functionality
  *
@@ -50,9 +49,26 @@ class MenuAppBar extends React.Component {
               node( "index.js", [], false, '__FILE'),
               node( "main.js", [], false, '__FILE'),
               node(
-                "channels",
+                "Channels",
                 [
-                  node( "main.js", [], false, '__FILE')
+                  node( "work.js", [], false, '__FILE'),
+                  node(
+                    "Fun",
+                    [
+                      node( "what.js", [], false, '__FILE'),
+                      node( "testing.js", [], false, '__FILE'),
+                      node(
+                        "Random",
+                        [
+                          node( "fizz.js", [], false, '__FILE')
+                        ],
+                        false,
+                        '__DIRECTORY'
+                      ),
+                    ],
+                    true,
+                    '__DIRECTORY'
+                  )
                 ],
                 false,
                 '__DIRECTORY'
@@ -84,10 +100,32 @@ class MenuAppBar extends React.Component {
     })
   }
 
+  updateNode(node) {
+    console.log(node);
+    let newNode = this.modifyNode(this.state.tree.root, node )
+    this.setState({ tree: { root : newNode }})
+  }
+
+  modifyNode(currentNode, nodeToModify) {
+    if(currentNode === nodeToModify) {
+      return {...currentNode, isOpen: !currentNode.isOpen}
+    }
+    return {...currentNode, nodeChildren: currentNode.nodeChildren.map(c => this.modifyNode(c, nodeToModify))} ;
+  }
+
   renderNode(node) {
+    if(node.nodeType === "__DIRECTORY" && node.nodeChildren.length > 0){
+      return (
+        <div>
+          <li className="bold" onClick={() => this.updateNode(node)}>{node.name}</li>
+          { node.isOpen && node.nodeChildren.map(c => this.renderTree(c))}
+        </div>
+      )
+    }
     return (
-      <div>
-      </div>
+      <li>
+        {node.name}
+      </li>
     )
   }
 
@@ -95,6 +133,7 @@ class MenuAppBar extends React.Component {
     console.log(root);
     return (
       <ul>
+        {this.renderNode(root)}
       </ul>
     )
   }
@@ -102,10 +141,14 @@ class MenuAppBar extends React.Component {
   render() {
     const shouldCreateProject = _.isEmpty(this.state.tree)
     console.log(this.state)
+    let addItemType = shouldCreateProject? 'Project': 'Directory'
 
     return (
       <div className={'hey'}>
-        React Tree
+        <h1>
+          React Tree
+        </h1>
+        <button type="button" className="btn btn-primary add-button">{addItemType}</button>
         <ul>
         {
           this.renderTree(this.state.tree.root)
